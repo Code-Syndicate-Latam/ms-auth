@@ -22,8 +22,8 @@ public class JwtService {
     @Value("${jwt.refresh-token.expiration-milliseconds}")
     private Long refreshExpiration;
 
-    public String generateToken(UserDto user){
-        return buildToken(user, jwtExpiration);
+    public String generateToken(UserDto user, String jti){
+        return buildToken(user, jwtExpiration, jti);
     }
     public String extractUsername(final String token){
         final Claims jwtToken = Jwts.parser()
@@ -32,6 +32,14 @@ public class JwtService {
                 .parseSignedClaims(token)
                 .getPayload();
         return jwtToken.getSubject();
+    }
+    public String extractJti(final String token){
+        final Claims jwtToken = Jwts.parser()
+                .verifyWith(getSignInKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+        return jwtToken.getId();
     }
     public Date extractExpiration(final String token){
         final Claims jwtToken = Jwts.parser()
@@ -49,17 +57,19 @@ public class JwtService {
     public boolean tokenIsExpired(final String token){
         return extractExpiration(token).before(new Date());
     }
-    public String generateRefreshToken(UserDto user){
-        return  buildToken(user, refreshExpiration);
+    public String generateRefreshToken(UserDto user, String jti){
+        return  buildToken(user, refreshExpiration, jti);
 
 
     }
-    public String buildToken(final UserDto user, final Long expiration ){
+    public String buildToken(final UserDto user, final Long expiration, String jti ){
         Map<String, Object> claims = new HashMap<>();
+        claims.put("user_id",user.getUserId());
         claims.put("role", user.getRole());                 // String
         claims.put("permissions", user.getPermissions());
+
         return Jwts.builder()
-            .id(user.getUserId())
+            .id(jti)
             .subject(user.getEmail())
             .claims(claims)
             .issuedAt(new Date(System.currentTimeMillis()))
