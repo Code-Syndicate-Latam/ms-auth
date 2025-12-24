@@ -1,0 +1,8 @@
+name: codeql-config.yml
+
+paths-ignore:
+  - target
+  - .m2
+  - lib
+  - build
+  - generated-sources
