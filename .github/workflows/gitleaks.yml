@@ -10,5 +10,3 @@ permissions:
 jobs:
   call-central-gitleaks:
     uses: Code-Syndicate-Latam/org-security/.github/workflows/gitleaks.yml@main
-    with:
-      severity: high
