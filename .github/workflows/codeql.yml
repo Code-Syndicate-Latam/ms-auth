@@ -6,13 +6,16 @@ on:
   pull_request:
     branches: [ main ]
   schedule:
-    - cron: '* 9 * * *'
+    - cron: '0 9 * * 0'
 
 permissions:
+  security-events: write
   contents: read
 
 jobs:
-  codeql_java_backend:
-    uses: Code-Syndicate-Latam/org-security/.github/workflows/codeql_java_backend.yml@main
+  call-central-codeql-javascript-typescript-frontend:
+    uses: Code-Syndicate-Latam/org-security/.github/workflows/codeql_java_backend.yaml@main
+    permissions: inherit
+    secrets: inherit
     with:
-      config-file: .github/codeql/codql-config.yml
+      config-file: .github/codeql/codeql-config.yaml
