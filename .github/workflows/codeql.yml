@@ -8,11 +8,14 @@ on:
   schedule:
     - cron: '0 9 * * 0'
 
-permissions: inherit
+permissions:
+  security-events: write
+  contents: read
 
 jobs:
   codeql_java_backend:
     uses: Code-Syndicate-Latam/org-security/.github/workflows/codeql_java_backend.yml@main
+    permissions: inherit
     with:
       secrets: inherit
       config-file: .github/codeql/codeql-config.yml
