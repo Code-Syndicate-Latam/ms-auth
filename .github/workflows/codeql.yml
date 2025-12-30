@@ -13,9 +13,9 @@ permissions:
   contents: read
 
 jobs:
-  call-central-codeql-javascript-typescript-frontend:
-    uses: Code-Syndicate-Latam/org-security/.github/workflows/codeql_java_backend.yaml@main
+  codeql_java_backend:
+    uses: Code-Syndicate-Latam/org-security/.github/workflows/codeql_java_backend.yml@main
     permissions: inherit
     secrets: inherit
     with:
-      config-file: .github/codeql/codeql-config.yaml
+      config-file: .github/codeql/codeql-config.yml
