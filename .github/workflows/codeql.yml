@@ -8,9 +8,7 @@ on:
   schedule:
     - cron: '0 9 * * 0'
 
-permissions:
-  security-events: write
-  contents: read
+permissions: inherit
 
 jobs:
   codeql_java_backend:
