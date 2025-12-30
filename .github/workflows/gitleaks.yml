@@ -12,5 +12,4 @@ jobs:
   call-central-gitleaks:
     uses: Code-Syndicate-Latam/org-security/.github/workflows/gitleaks.yml@main
     secrets:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
