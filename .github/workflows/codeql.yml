@@ -1,0 +1,20 @@
+name: codeql.yml
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: '0 9 * * 0'
+
+permissions:
+  security-events: write
+  contents: read
+  actions: read
+#estesi
+jobs:
+  codeql_java_backend:
+    uses: Code-Syndicate-Latam/org-security/.github/workflows/codeql_java_backend.yml@main
+    with:
+      config-file: .github/codeql/codeql-config.yml
