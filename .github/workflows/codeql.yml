@@ -11,11 +11,12 @@ on:
 permissions:
   security-events: write
   contents: read
+  actions: read
 
 jobs:
   codeql_java_backend:
     uses: Code-Syndicate-Latam/org-security/.github/workflows/codeql_java_backend.yml@main
-    permissions: inherit
+    secrets:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     with:
-      secrets: inherit
       config-file: .github/codeql/codeql-config.yml
