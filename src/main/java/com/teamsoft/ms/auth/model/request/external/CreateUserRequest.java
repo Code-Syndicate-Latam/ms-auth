@@ -1,4 +1,4 @@
-package com.teamsoft.ms.auth.entities;
+package com.teamsoft.ms.auth.model.request.external;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -13,7 +13,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class User {
+public class CreateUserRequest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

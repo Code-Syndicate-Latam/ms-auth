@@ -1,11 +1,11 @@
-package com.teamsoft.ms.auth.service;
+package com.teamsoft.ms.auth.service.Impl;
 
 
 import com.teamsoft.ms.auth.entities.Token;
-import com.teamsoft.ms.auth.entities.User;
 import com.teamsoft.ms.auth.model.dto.UserDto;
 import com.teamsoft.ms.auth.model.request.LoginRequest;
 import com.teamsoft.ms.auth.model.request.RegisterRequest;
+import com.teamsoft.ms.auth.model.request.external.CreateUserRequest;
 import com.teamsoft.ms.auth.model.response.TokenResponse;
 import com.teamsoft.ms.auth.repository.TokenRepository;
 import jakarta.transaction.Transactional;
@@ -41,7 +41,7 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     @Transactional
     public TokenResponse register(RegisterRequest req){
-        var user = User.builder()
+        var user = CreateUserRequest.builder()
                 .nombre(req.name)
                 .email(req.email)
                 .rol(req.rol)
@@ -52,6 +52,7 @@ public class AuthService {
                 .passwordHash(passwordEncoder.encode(req.password))
                 .build();
         // Llamar a creacion de usuario ms-usuarios
+
         var userDto = getUserTest();
         String accessJti = UUID.randomUUID().toString();
         String refreshJti = UUID.randomUUID().toString();

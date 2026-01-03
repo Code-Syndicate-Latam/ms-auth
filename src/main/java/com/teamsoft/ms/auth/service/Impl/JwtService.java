@@ -1,4 +1,4 @@
-package com.teamsoft.ms.auth.service;
+package com.teamsoft.ms.auth.service.Impl;
 
 import com.teamsoft.ms.auth.model.dto.UserDto;
 import io.jsonwebtoken.Claims;

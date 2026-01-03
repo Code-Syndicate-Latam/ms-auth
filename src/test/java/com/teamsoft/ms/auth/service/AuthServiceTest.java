@@ -5,6 +5,8 @@ import com.teamsoft.ms.auth.model.request.LoginRequest;
 import com.teamsoft.ms.auth.model.request.RegisterRequest;
 import com.teamsoft.ms.auth.model.response.TokenResponse;
 import com.teamsoft.ms.auth.repository.TokenRepository;
+import com.teamsoft.ms.auth.service.Impl.AuthService;
+import com.teamsoft.ms.auth.service.Impl.JwtService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
