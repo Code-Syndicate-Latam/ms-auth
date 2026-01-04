@@ -1,6 +1,7 @@
 package com.teamsoft.ms.auth.service.Impl;
 
 
+import com.teamsoft.ms.auth.entities.Role;
 import com.teamsoft.ms.auth.entities.Token;
 import com.teamsoft.ms.auth.entities.User;
 import com.teamsoft.ms.auth.exception.RoleNotFoundException;
@@ -12,10 +13,13 @@ import com.teamsoft.ms.auth.model.response.TokenResponse;
 import com.teamsoft.ms.auth.repository.TokenRepository;
 import com.teamsoft.ms.auth.repository.UserRepository;
 import com.teamsoft.ms.auth.repository.RoleRepository;
+import com.teamsoft.ms.auth.service.IAuthService;
+import com.teamsoft.ms.auth.service.IJwtService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -27,6 +31,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -34,7 +39,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class AuthService {
+public class AuthService implements IAuthService {
     @Value("${jwt.expiration-milliseconds}")
     private Long jwtExpiration;
     @Value("${jwt.refresh-token.expiration-milliseconds}")
@@ -44,7 +49,9 @@ public class AuthService {
 
     private final TokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtService jwtService;
+
+    private final IJwtService jwtService;
+
     private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
@@ -80,13 +87,7 @@ public class AuthService {
         user = userRepository.save(user);
 
         // Construir UserDto para tokens
-        var userDto = UserDto.builder()
-                .userId(user.getId().toString())
-                .email(user.getEmail())
-                .hashedPassword(user.getPasswordHash())
-                .role(user.getRoleId() != null ? user.getRoleId().toString() : null)
-                .permissions(List.of())
-                .build();
+        var userDto = buildUserDto(user);
 
         String accessJti = UUID.randomUUID().toString();
         String refreshJti = UUID.randomUUID().toString();
@@ -210,22 +211,18 @@ public class AuthService {
         saveUserToken(userDto.getUserId(), refreshJti, Token.TokenType.REFRESH, refreshExpiresAt, absoluteExpiresAt);
         return new TokenResponse(jwtToken, refreshToken);
     }
-
-    public UserDto getUserTest(){
-        return UserDto.builder()
-                .userId("123")
-                .role("1")
-                .permissions(List.of("1"))
-                .hashedPassword(passwordEncoder.encode("clave123"))
-                .email("jaider@admin.com")
-                .build();
-    }
-
     private UserDto buildUserDto(User user){
+        List<String> permissions = Collections.emptyList();
+        if (user.getRoleId() != null) {
+            permissions = roleRepository.findById(user.getRoleId())
+                    .map(Role::getPermissions)
+                    .orElse(Collections.emptyList());
+        }
+
         return UserDto.builder()
                 .userId(user.getId().toString())
                 .role(user.getRoleId() != null ? user.getRoleId().toString() : null)
-                .permissions(List.of())
+                .permissions(permissions)
                 .hashedPassword(user.getPasswordHash())
                 .email(user.getEmail())
                 .build();

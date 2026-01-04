@@ -2,9 +2,10 @@ package com.teamsoft.ms.auth.controller;
 
 import com.teamsoft.ms.auth.entities.Role;
 import com.teamsoft.ms.auth.service.Impl.RoleService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,10 +13,11 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/roles")
+@RequiredArgsConstructor
 public class RoleController {
 
-    @Autowired
-    private RoleService roleService;
+
+    private final RoleService roleService;
 
     @GetMapping
     public List<Role> getAllRoles() {
@@ -42,10 +44,29 @@ public class RoleController {
             role.setRoleName(roleDetails.getRoleName());
             role.setDescription(roleDetails.getDescription());
             role.setStatus(roleDetails.isStatus());
+            role.setPermissions(roleDetails.getPermissions());
             return ResponseEntity.ok(roleService.save(role));
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @PostMapping("/{id}/permissions")
+    public ResponseEntity<Role> addPermission(@PathVariable Long id, @RequestParam String permissionCode) {
+        if (!isValidPermission(permissionCode)) {
+            return ResponseEntity.badRequest().build();
+        }
+        Role updated = roleService.addPermission(id, permissionCode);
+        return ResponseEntity.ok(updated);
+    }
+
+    @DeleteMapping("/{id}/permissions")
+    public ResponseEntity<Role> removePermission(@PathVariable Long id, @RequestParam String permissionCode) {
+        if (!isValidPermission(permissionCode)) {
+            return ResponseEntity.badRequest().build();
+        }
+        Role updated = roleService.removePermission(id, permissionCode);
+        return ResponseEntity.ok(updated);
     }
 
     @DeleteMapping("/{id}")
@@ -56,5 +77,12 @@ public class RoleController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    private boolean isValidPermission(String permissionCode) {
+        if (!StringUtils.hasText(permissionCode)) {
+            return false;
+        }
+        return permissionCode.contains(":");
     }
 }

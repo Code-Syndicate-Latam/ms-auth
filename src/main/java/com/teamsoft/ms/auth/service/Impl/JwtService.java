@@ -1,6 +1,7 @@
 package com.teamsoft.ms.auth.service.Impl;
 
 import com.teamsoft.ms.auth.model.dto.UserDto;
+import com.teamsoft.ms.auth.service.IJwtService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -14,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class JwtService {
+public class JwtService implements IJwtService {
     @Value("${jwt.secret-key}")
     private String secretKey;
     @Value("${jwt.expiration-milliseconds}")
@@ -22,9 +23,11 @@ public class JwtService {
     @Value("${jwt.refresh-token.expiration-milliseconds}")
     private Long refreshExpiration;
 
+    @Override
     public String generateToken(UserDto user, String jti){
         return buildToken(user, jwtExpiration, jti);
     }
+    @Override
     public String extractUsername(final String token){
         final Claims jwtToken = Jwts.parser()
                 .verifyWith(getSignInKey())
@@ -33,6 +36,7 @@ public class JwtService {
                 .getPayload();
         return jwtToken.getSubject();
     }
+    @Override
     public String extractJti(final String token){
         final Claims jwtToken = Jwts.parser()
                 .verifyWith(getSignInKey())
@@ -41,6 +45,7 @@ public class JwtService {
                 .getPayload();
         return jwtToken.getId();
     }
+    @Override
     public Date extractExpiration(final String token){
         final Claims jwtToken = Jwts.parser()
                 .verifyWith(getSignInKey())
@@ -49,19 +54,23 @@ public class JwtService {
                 .getPayload();
         return jwtToken.getExpiration();
     }
+    @Override
     public boolean isTokenValid(final String token, final UserDto user){
         final String email = extractUsername(token);
         return (email.equals(user.getEmail()) && !tokenIsExpired(token));
 
     }
+    @Override
     public boolean tokenIsExpired(final String token){
         return extractExpiration(token).before(new Date());
     }
+    @Override
     public String generateRefreshToken(UserDto user, String jti){
         return  buildToken(user, refreshExpiration, jti);
 
 
     }
+    @Override
     public String buildToken(final UserDto user, final Long expiration, String jti ){
         Map<String, Object> claims = new HashMap<>();
         claims.put("user_id",user.getUserId());
