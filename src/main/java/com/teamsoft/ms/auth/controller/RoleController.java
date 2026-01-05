@@ -1,6 +1,7 @@
 package com.teamsoft.ms.auth.controller;
 
 import com.teamsoft.ms.auth.entities.Role;
+import com.teamsoft.ms.auth.service.IRoleService;
 import com.teamsoft.ms.auth.service.Impl.RoleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,7 +18,7 @@ import java.util.Optional;
 public class RoleController {
 
 
-    private final RoleService roleService;
+    private final IRoleService roleService;
 
     @GetMapping
     public List<Role> getAllRoles() {

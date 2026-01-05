@@ -10,4 +10,6 @@ public interface IRoleService {
     Optional<Role> findById(Long id);
     Role save(Role role);
     void deleteById(Long id);
+    Role removePermission(Long roleId, String permissionCode);
+    Role addPermission(Long roleId, String permissionCode);
 }

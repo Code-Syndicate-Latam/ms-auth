@@ -39,13 +39,14 @@ public class RoleService  implements IRoleService {
         roleRepository.deleteById(id);
     }
 
+    @Override
     public Role addPermission(Long roleId, String permissionCode) {
         Role role = roleRepository.findById(roleId)
                 .orElseThrow(() -> new IllegalArgumentException("Role not found: " + roleId));
         role.getPermissions().add(permissionCode);
         return roleRepository.save(role);
     }
-
+    @Override
     public Role removePermission(Long roleId, String permissionCode) {
         Role role = roleRepository.findById(roleId)
                 .orElseThrow(() -> new IllegalArgumentException("Role not found: " + roleId));
