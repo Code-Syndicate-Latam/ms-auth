@@ -84,7 +84,7 @@ class AuthServiceTest {
 
     private RegisterRequest buildRegisterRequest(String roleId) {
         RegisterRequest req = new RegisterRequest();
-        req.name = "John";
+        req.firstName = "John";
         req.lastName = "Doe";
         req.email = "john.doe@example.com";
         req.documentType = "CC";

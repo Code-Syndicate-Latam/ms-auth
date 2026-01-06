@@ -1,5 +1,6 @@
 package com.teamsoft.ms.auth.model.request.external;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Builder
@@ -14,42 +16,30 @@ import java.util.UUID;
 @AllArgsConstructor
 @Getter
 public class CreateUserRequest {
+    @JsonProperty("document_type_id")
+    private String documentTypeId;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "usuario_id")
-    private UUID usuarioId;
+    @JsonProperty("identification_number")
+    private String identificationNumber;
 
-    @Column(name = "nombre", length = 100, nullable = false)
-    private String nombre;
+    @JsonProperty("date_of_birth")
+    private String dateOfBirth;
 
-    @Column(name = "apellido", length = 100, nullable = false)
-    private String apellido;
+    @JsonProperty("first_name")
+    private String firstName;
 
-    @Column(name = "tipo_documento", length = 10, nullable = false)
-    private String tipoDocumento;
+    @JsonProperty("middle_name")
+    private String middleName;
 
-    @Column(name = "numero_documento", length = 20, nullable = false, unique = true)
-    private String numeroDocumento;
+    @JsonProperty("first_last_name")
+    private String firstLastName;
 
-    @Column(name = "email", nullable = false, unique = true)
-    private String email;
+    @JsonProperty("second_last_name")
+    private String secondLastName;
 
-    @Column(name = "password_hash", nullable = false)
-    private String passwordHash;
+    @JsonProperty("address")
+    private String address;
 
-    @Column(name = "telefono", length = 20)
-    private String telefono;
-
-    @Column(name = "rol", length = 50, nullable = false)
-    private String rol;
-
-    @Column(name = "activo", nullable = false)
-    private Boolean activo = true;
-
-    @Column(name = "fecha_creacion", nullable = false)
-    private Instant fechaCreacion = Instant.now();
-
-    @Column(name = "ultimo_acceso")
-    private Instant ultimoAcceso;
+    @JsonProperty("phone")
+    private String phone;
 }

@@ -11,10 +11,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
+import org.springframework.web.reactive.function.client.WebClient;
 import java.time.Instant;
-import java.util.Collections;
-import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -24,20 +23,34 @@ public class AuthService implements IAuthService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
-
+    private final WebClient usersWebClient;
     @Override
     public void register(RegisterRequest req){
         var createUserReq = CreateUserRequest.builder()
-                .nombre(req.name)
-                .email(req.email)
-                .rol(req.rol)
-                .numeroDocumento(req.documentNumber)
-                .tipoDocumento(req.documentType)
-                .apellido(req.lastName)
-                .telefono(req.phone)
-                .passwordHash(passwordEncoder.encode(req.password))
+                .firstName(req.firstName)
+                .identificationNumber(req.identificationNumber)
+                .documentTypeId(req.documentTypeId)
+                .firstLastName(req.firstLastName)
+                .phone(req.phone)
+                .secondLastName(req.secondLastName)
+                .middleName(req.middleName)
+                .address(req.address)
+                .dateOfBirth(req.dateOfBirth)
                 .build();
         // Llamar a creacion de usuario ms-usuarios si se desea
+        usersWebClient.post()
+                .uri("")
+                .bodyValue(createUserReq)
+                .retrieve()
+                .onStatus(
+                        status -> status.is4xxClientError() || status.is5xxServerError(),
+                        resp -> resp.bodyToMono(String.class)
+                                .flatMap(body -> reactor.core.publisher.Mono.error(
+                                        new RuntimeException("Users-service error " + resp.statusCode() + ": " + body)
+                                ))
+                )
+                .toBodilessEntity()
+                .block();
 
         Long roleId = parseRoleId(req.rol);
         if (roleId == null || !roleRepository.existsById(roleId)) {
