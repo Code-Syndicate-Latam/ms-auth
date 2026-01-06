@@ -1,0 +1,12 @@
+title = "Gitleaks Config"
+
+[allowlist]
+description = "Allow common false positives"
+paths = [
+    '''.*test.*''',
+    '''.*example.*''',
+    '''.*target.*''',
+    '''.*build.*''',
+    '''.*dist.*''',
+    '''.*node_modules.*'''
+]

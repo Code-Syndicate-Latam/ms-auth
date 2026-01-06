@@ -1,0 +1,5 @@
+repos:
+  - repo: git@github.com:Code-Syndicate-Latam/org-security-hooks.git
+    rev: main
+    hooks:
+      - id: gitleaks
