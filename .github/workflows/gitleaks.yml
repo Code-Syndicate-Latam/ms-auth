@@ -1,0 +1,15 @@
+name: GitLeaks Scan
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: read
+  packages: read
+
+jobs:
+  call-central-gitleaks:
+    uses: Code-Syndicate-Latam/org-security/.github/workflows/gitleaks.yml@027a990d62256d989680515baf05e247a3aa107a
