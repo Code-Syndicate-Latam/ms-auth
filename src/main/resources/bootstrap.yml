@@ -1,0 +1,7 @@
+#spring:
+#  application:
+#    name: ms-auth
+#  cloud:
+#    config:
+#      profile: prod
+#      uri: http://127.0.0.1:8888

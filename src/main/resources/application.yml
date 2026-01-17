@@ -1,0 +1,76 @@
+server:
+  port: 0
+  uri: http://127.0.0.1 # se configura asi debido a que en este momento no se ha registrador en le discovery server
+
+###################################################
+## Configuration for the Spring Boot application ##
+###################################################
+spring:
+  application:
+    name: ms-auth
+  datasource:
+#    url: jdbc:postgresql://aws-1-us-east-1.pooler.supabase.com:5432/postgres
+    url: jdbc:postgresql://urbedb.postgres.database.azure.com:5432/auth_db
+#    username: postgres.buuyqvytwnqmjmckubhe
+    username: UrbeDb
+    password: Inmo*2026*
+#    password: X14j4J7Eg4Q97lv8
+    driver-class-name: org.postgresql.Driver
+
+#################################
+## Hibernate JPA configuration ##
+#################################
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+##############################################################################
+## Debe ser una cadena suficientemente larga para HS256 (ideal >= 32 chars) ##
+##############################################################################
+jwt:
+  secret-key: 4bd27d7ed08e7963af20a9e420eab8bed890fbc19c0096b2944833615836d562
+#30 minutos
+  expiration-milliseconds: 1800000 # 30 minutos
+#7 dias
+  refresh-token:
+    expiration-milliseconds: 604800000
+  absolute-session:
+    expiration-days: 30
+  kid: auth-service-key1
+  keystore:
+    path: classpath:jwt-keystore.p12
+    password: wW2ksJwjGmw9e45zqiQ4
+    key-alias: jwt
+    key-password: wW2ksJwjGmw9e45zqiQ4
+  service-client:
+    secret: secret123
+  callback:
+    uri: http://127.0.0.1:4200/login/oauth2/code/spa-client
+  logout:
+    uri: http://127.0.0.1:4200/
+  gateway-client:
+    secret: gatewaySecret123
+
+##########################################
+### No tocar la configuracion de eureka ##
+##########################################
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:8761/eureka/
+  instance:
+    instance-id: ${spring.application.name}:${random.uuid}
+    prefer-ip-address: true
+
+######################
+## User service URL ##
+######################
+clients:
+  users:
+    base-url: lb://ms-usuario/api/v1/users
