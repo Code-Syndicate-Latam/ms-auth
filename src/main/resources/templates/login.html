@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" data-theme="light">
+<head>
+    <title>Login Urbe</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Tailwind CSS & DaisyUI via CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.6.0/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        /* Personalización de colores específicos si Tailwind no los tiene por defecto */
+        .btn-urbe {
+            background-color: #FF4D00;
+            color: #F4F6F8;
+            border: none;
+        }
+        .btn-urbe:hover {
+            background-color: #00D26A;
+            color: #F4F6F8;
+        }
+        .link-urbe {
+            color: #0066FF;
+        }
+    </style>
+</head>
+<body class="bg-white flex items-center justify-center min-h-screen login-container">
+
+    <div class="w-full max-w-md bg-base-100 p-8">
+
+        <!-- Mensaje de error -->
+        <div th:if="${param.error}" class="alert alert-error mb-6 py-2 text-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            <span>Usuario o contraseña inválidos.</span>
+        </div>
+
+        <!-- 2. Imagen Logo -->
+        <figure class="mb-[37px] flex justify-center">
+            <!-- Asegúrate de que la imagen esté en src/main/resources/static/img/Logo.png -->
+            <img src="/img/Logo.png" alt="Urbe Logo" class="w-[244px] h-[80px] object-contain" />
+        </figure>
+
+
+
+        <!-- Formulario -->
+        <form th:action="@{/login}" method="post" class="flex flex-col items-center">
+
+            <!-- 3. Campo Correo -->
+            <div class="form-control border rounded-full w-full flex justify-center">
+                <input type="text"
+                       id="username"
+                       name="username"
+                       placeholder="Correo Electronico"
+                       class="input input-bordered  h-[56px] bg-white"
+                       required autofocus />
+            </div>
+
+            <!-- 4. Campo Contraseña (Spacing 22px) -->
+            <div class="form-control border rounded-full w-full mt-[22px] flex justify-center">
+                <input type="password"
+                       id="password"
+                       name="password"
+                       placeholder="Contraseña"
+                       class="input input-bordered  h-[56px] bg-white"
+                       required />
+            </div>
+
+            <!-- 5. Botón Ingresar -->
+            <div class="form-control border rounded-full w-full mt-[22px] flex justify-center">
+                <button type="submit" class="btn btn-urbe  h-[56px] text-lg font-normal normal-case">
+                    Ingresar
+                </button>
+            </div>
+
+            <!-- 6. Enlace Olvidaste contraseña -->
+            <div class="mt-6 text-center">
+                <a href="#" class="link link-hover link-urbe text-sm">¿Olvidaste tu contraseña?</a>
+            </div>
+
+            <!-- 7. Enlace Registrate -->
+            <div class="mt-4 text-center">
+                <a href="http://localhost:4200/profile" class="link link-hover link-urbe text-sm font-semibold">Registrate</a>
+            </div>
+
+        </form>
+    </div>
+
+</body>
+</html>
